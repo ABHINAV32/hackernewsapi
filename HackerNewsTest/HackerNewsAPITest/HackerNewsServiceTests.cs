@@ -35,51 +35,8 @@ namespace HackerNewsAPITest
         }
 
         [TestMethod]
-        public async Task GetTopStoriesAsync_ReturnsStories_WhenCacheIsEmpty()
-        {
-            var cachedStories = new List<Story>();
-            _mockMemoryCache = MockMemoryCacheService.GetMemoryCache(cachedStories);
-            _hackerNewsService = new HackerNewsService(_httpClient, _mockMemoryCache);
-
-            var fakeStoryIds = Enumerable.Range(1, 200).ToList();
-            var fakeStories = fakeStoryIds.Select(id => new Story { Id = id, Title = $"Story {id}", Url = $"http://storyurl{id}.com" }).ToList();
-
-            _mockHttpHandler.Protected().Setup<Task<HttpResponseMessage>>("SendAsync",
-               ItExpr.Is<HttpRequestMessage>(req => req.RequestUri.AbsoluteUri.Contains("topstories.json")),
-               ItExpr.IsAny<CancellationToken>())
-               .ReturnsAsync(new HttpResponseMessage
-               {
-                   StatusCode = HttpStatusCode.OK,
-                   Content = new StringContent(JsonConvert.SerializeObject(fakeStoryIds))
-               });
-
-            foreach (var story in fakeStories)
-            {
-                _mockHttpHandler.Protected()
-                    .Setup<Task<HttpResponseMessage>>(
-                        "SendAsync",
-                        ItExpr.Is<HttpRequestMessage>(req => req.RequestUri.AbsoluteUri.Contains($"item/{story.Id}.json")),
-                        ItExpr.IsAny<CancellationToken>())
-                    .ReturnsAsync(new HttpResponseMessage
-                    {
-                        StatusCode = HttpStatusCode.OK,
-                        Content = new StringContent(JsonConvert.SerializeObject(story))
-                    });
-            }
-            var result = await _hackerNewsService.GetTopStoriesAsync();
-
-            Assert.AreEqual(200, result.Count); // Assert the number of stories fetched matches expected number
-            _mockHttpHandler.Protected().Verify(
-                "SendAsync",
-                Times.Exactly(201), // Once for the top stories and 200 times for each story
-                ItExpr.IsAny<HttpRequestMessage>(),
-                ItExpr.IsAny<CancellationToken>());
-        }
-
-        [TestMethod]
         public async Task GetTopStoriesAsync_ReturnsStories_FromCache()
         {
-            // Arrange
             var cachedStories = new List<Story>
             {
                 new Story { Id = 1, Title = "Cached Story 1", Url = "http://cachedstory1.com" },

@@ -15,6 +15,16 @@ namespace HackerNewsAPI.Services
             _cache = memoryCache;
         }
 
+        public async Task<List<Story>> GetTopStoriesAsyncFromServer()
+        {
+            List<int> storyIds = await _httpClient.GetFromJsonAsync<List<int>>("https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty");
+            var tasks = storyIds.Take(200).Select(id => GetStoryAsync(id));
+            var stories = (await Task.WhenAll(tasks)).Where(story => story != null && !string.IsNullOrEmpty(story.Url) &&
+            !string.IsNullOrEmpty(story.Title)).ToList();
+
+            return stories;
+        }
+
         public async Task<List<Story>> GetTopStoriesAsync()
         {
             if (!_cache.TryGetValue("TopStories", out List<Story> stories))

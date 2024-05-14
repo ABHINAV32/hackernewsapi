@@ -21,6 +21,28 @@ namespace HackerNewsAPI.Controllers
         /// Get Top Stories 
         /// </summary>
         /// <returns></returns>
+        [HttpGet("GetStoriesFromServer", Name = "GetTopStoriesFromServer")]
+        public async Task<IActionResult> GetTopStoriesFromServer()
+        {
+            try
+            {
+                this._logger.LogDebug("Executing GetTopStoriesFromServer method");
+                var stories = await _newsService.GetTopStoriesAsyncFromServer();
+                this._logger.LogDebug("Exiting GetTopStoriesFromServer method");
+                return Ok(stories.Select(s => new { s.Title, s.Url }));
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to fetch top stories");
+                return StatusCode(500, "An error occurred while processing the request.");
+            }
+        }
+
+        /// <summary>
+        /// Get Top Stories 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("GetStories", Name = "GetStories")]
         public async Task<IActionResult> GetTopStories()
         {
@@ -54,26 +76,6 @@ namespace HackerNewsAPI.Controllers
             {
                 _logger.LogError(ex, "Failed to fetch top stories");
                 return StatusCode(500, "An error occurred while processing the request.");
-            }
-        }
-
-        /// <summary>
-        /// Get Top Stories with multi threading enabled with lmit of number of threads
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("GetStoriesMultiThreadedWithLimit", Name = "GetStoriesMultiThreadedWithLimit")]
-        public async Task<IActionResult> GetTopStoriesMultiThreadedWithLimit()
-        {
-            try
-            {
-
-                var stories = await _newsService.GetTopStoriesAsyncMultiThreadedWithLimit();
-                return Ok(stories.Select(s => new { s.Title, s.Url }));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to fetch top stories");
-                return StatusCode(500, "An error occurred while processing your request.");
             }
         }
     }
