@@ -3,10 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33801.468
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HackerNewsAPITest", "HackerNewsTest\HackerNewsAPITest\HackerNewsAPITest.csproj", "{392C50BA-5FB8-4B5D-A88D-81833BA414B8}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HackerNewsAPI", "API\HackerNewsAPI.csproj", "{E596420E-2888-4BEE-8F4E-B3307C9712B2}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HackerNewsAPITest", "HackerNewsTest\HackerNewsAPITest\HackerNewsAPITest.csproj", "{392C50BA-5FB8-4B5D-A88D-81833BA414B8}"
+EndProject
+
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

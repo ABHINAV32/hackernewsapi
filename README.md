@@ -3,6 +3,12 @@
 This API provides endpoints to retrieve top stories from Hacker News.
 https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty
 
+## Startup
+Clone the project from the url-: https://github.com/ABHINAV32/hackernewsapi
+If HackerNewsAPI is not main project, close the solution.
+Delete the .vs folder from the folder where code is downloaded
+Reopen the solution
+
 ## Endpoints
 
 ### Get Top Stories From Server. It always fetches from server
